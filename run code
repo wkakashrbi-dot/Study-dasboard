@@ -1,0 +1,9 @@
+cd backend
+python app.py
+
+cd dashboard-ui
+npm start
+GitHub username:wkakashrbi-dot
+The desired repository name: Study dasboard
+i want a public repo.
+I want deployment (e.g., GitHub Pages for the dashboard UI).
