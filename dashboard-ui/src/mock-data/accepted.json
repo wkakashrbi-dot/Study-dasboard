@@ -1,0 +1,22 @@
+[
+  {
+    "title": "RBI Announces New Repo Rate Revision",
+    "date": "2025-12-10",
+    "source": "RBI",
+    "efi": 95,
+    "keywords": ["Repo Rate Revision", "RBI Policy Guidelines"],
+    "domain": "Finance",
+    "body": "The Reserve Bank of India has revised the repo rate to 6.5% effective immediately...",
+    "reason": "High EFI, matches RBI/Finance keywords"
+  },
+  {
+    "title": "PM-KISAN Scheme Disbursement Update",
+    "date": "2025-12-10",
+    "source": "PIB",
+    "efi": 88,
+    "keywords": ["PM-KISAN", "Government Schemes"],
+    "domain": "GA",
+    "body": "The government has released the latest installment under the PM-KISAN scheme...",
+    "reason": "Relevant government scheme, high EFI"
+  }
+]

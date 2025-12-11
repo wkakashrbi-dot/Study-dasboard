@@ -1,0 +1,13 @@
+{
+  "batch_id": "2025-12-11_Report",
+  "run_timestamp": "2025-12-11T08:00:00Z",
+  "total_extracted": 50,
+  "total_accepted": 18,
+  "total_rejected": 32,
+  "match_rate": 36,
+  "highest_efi": 95,
+  "source_coverage": ["RBI", "PIB", "The Hindu", "Indian Express"],
+  "keyword_distribution": {"Finance": 8, "GA": 6, "ESI": 4},
+  "efi_histogram": {"80-100": 5, "60-79": 7, "40-59": 4, "0-39": 2},
+  "errors": []
+}

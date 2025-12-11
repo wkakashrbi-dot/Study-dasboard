@@ -1,0 +1,7 @@
+Batch-ID: 2025-12-11_Report
+Total_Scanned: 25
+Accepted_Count: 23
+Rejected_Count: 376
+Top_EFI_Score: 100
+Highest_EFI_Item: {'title': 'Open door, open mind: How Sanjay Malhotra quietly liberalised RBI in his first year', 'summary': 'When Sanjay Malhotra walked into Mint Street a year ago, few expected him to move as quickly and as boldly as he did to reform one of the country’s most tightly controlled sectors. Twelve months on, bankers believe the Reserve Bank of India (RBI) suddenly feels more open and accessible, and far more willing to rethink old rules.\n\nIn his first year as RBI governor, Malhotra has presided over some of the most consequential and liberalising shifts in Indian banking regulation in nearly a decade. Ba', 'category': '', 'RelevanceWeight': 5, 'DataWeight': 5, 'PolicyWeight': 5, 'RecurrenceWeight': 5, 'EFI_Score': 100, 'EFI_Category': 'MUST STUDY', 'Possible_MCQs': [], 'source': 'PRIORITY-2', 'date': '2025-12-10', 'url': 'https://www.livemint.com/economy/sanjay-malhotra-rbi-governor-first-year-11765282563919.html', 'keywords': [], 'EFI_Summary': 'EFI Summary → 100/100: MUST STUDY'}
+Top_Domains_Represented: ['PRIORITY-3', 'PRIORITY-2']
