@@ -20,7 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install --upgrade pip
+          pip install -r requirements-file.txt
+
 
       - name: Execute Script
         run: |
