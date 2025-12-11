@@ -24,4 +24,4 @@ jobs:
 
       - name: Execute Script
         run: |
-          python app.py
+          python news_scraper.py
