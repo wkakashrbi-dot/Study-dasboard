@@ -24,4 +24,4 @@ jobs:
 
       - name: Execute Script
         run: |
-          python your_script.py
+          python app.py
