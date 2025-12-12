@@ -2,21 +2,26 @@ name: Nightly Job at 2AM IST
 
 on:
   schedule:
-    - cron: "30 20 * * *"   # 2:00 AM IST (20:30 UTC)
+    - cron: "30 20 * * *"   # Runs at 02:00 AM IST daily
   workflow_dispatch:
+
+permissions:
+  contents: write     # REQUIRED to allow git push using GITHUB_TOKEN
 
 jobs:
   run-task:
     runs-on: ubuntu-latest
-
     env:
-      TIMESTAMP: ${{ github.run_id }}
+      REPORT_GLOB_1: "Accepted_*_Report.xlsx"
+      REPORT_GLOB_2: "Rejected_*_Report.xlsx"
+      REPORT_GLOB_3: "Summary_*_Report.txt"
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # Required so commit back to repo works
+          fetch-depth: 0
+          persist-credentials: true   # needed to push using GITHUB_TOKEN
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,45 +30,59 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements-file.txt
 
       - name: Run News Scraper
+        id: scraper
         run: |
           python news_scraper.py
+          TIMESTAMP=$(date -u +%Y%m%dT%H%M%SZ)
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
 
-      - name: Debug – List generated files
+      - name: Debug - List generated files
         run: |
-          echo "Listing files..."
           ls -lah
 
-      - name: Upload generated Excel/TXT reports (Artifacts)
+      # -------------------------------------------------------------
+      # Upload reports as artifacts (ALWAYS)
+      # -------------------------------------------------------------
+      - name: Upload Generated Reports
         uses: actions/upload-artifact@v4
         with:
-          name: GA-Reports-${{ github.run_id }}
+          name: reports-${{ env.TIMESTAMP }}
           path: |
-            Accepted_*_Report.xlsx
-            Rejected_*_Report.xlsx
-            Summary_*_Report.txt
-          retention-days: 7
+            ${{ env.REPORT_GLOB_1 }}
+            ${{ env.REPORT_GLOB_2 }}
+            ${{ env.REPORT_GLOB_3 }}
 
       # -------------------------------------------------------------
-      # OPTIONAL: AUTO-COMMIT REPORTS TO GITHUB REPOSITORY
-      # Enable this only if you want the generated Excel/TXT files 
-      # to permanently appear in the GitHub repo.
+      # COMMIT & PUSH FOR BOTH SCHEDULED AND MANUAL RUNS
       # -------------------------------------------------------------
-
-      - name: Commit reports to repo
-        if: always()
+      - name: Move generated files into repo folder
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          mkdir -p reports
+          for f in Accepted_*_Report.xlsx Rejected_*_Report.xlsx Summary_*_Report.txt; do
+            if [ -f "$f" ]; then
+              mv -f "$f" reports/
+            fi
+          done
+          ls -lah reports
 
-          # Move output files into repo root (if not already)
-          ls -lah
-
-          git add *.xlsx *.txt || echo "No report files to add"
+      - name: Commit changes back to repo (ALL RUNS)
+        env:
+          GIT_COMMITTER_NAME: "github-actions[bot]"
+          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
+        run: |
+          git config user.name "$GIT_COMMITTER_NAME"
+          git config user.email "$GIT_COMMITTER_EMAIL"
           
-          git commit -m "Auto-generated reports for run ${{ github.run_id }}" || echo "Nothing to commit"
+          git add reports/*
           
-          git push || echo "Nothing to push"
+          if git diff --cached --quiet; then
+            echo "No changes detected; skipping commit."
+            exit 0
+          fi
+          
+          git commit -m "Auto-update reports for ${{ env.TIMESTAMP }}"
+          git push origin HEAD:${{ github.ref_name }}
