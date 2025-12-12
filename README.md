@@ -1,69 +1,81 @@
 # Daily-news-scraper
 
+This project is an autonomous news acquisition and processing engine designed to scan, ingest, and structure information from a curated set of authoritative public sources. It leverages the capabilities of tools such as `newspaper3k` to retrieve and parse articles while enforcing strict source and date controls.
 
-This project is an autonomous, exam-focused news extraction engine for RBI Grade B (General) – GA + ESI + Finance. It leverages [newspaper3k](https://newspaper.readthedocs.io/en/latest/user_guide/quickstart.html#) and other tools to scan, ingest, and synthesize news only from a curated set of authoritative government, regulatory, and financial sources, including:
-
-The engine strictly enforces T-1 date filtering, keyword/topic/domain matching, and produces Excel and summary outputs for RBI exam preparation. All SMS and unrelated features have been removed for compliance and focus.
-
-This software is an autonomous news extraction engine designed specifically for RBI Grade B (General) – GA + ESI + Finance coverage. It scans, crawls, ingests, parses, and synthesizes ONLY VERIFIED news from authoritative sources, strictly adhering to RBI exam requirements.
+The system executes daily ingestion cycles, applies topic- and keyword-based filtering, and exports structured outputs for downstream analytical workflows. All optional communication or auxiliary modules have been removed to keep the system lean, compliant, and narrowly focused on content extraction and classification.
 
 ## Key Features
-- **Authoritative Source Extraction:**
-   - Only scans and extracts news from a curated list of RBI-relevant, government, and financial news sources.
-- **T-1 Date Filtering:**
-   - Extracts news strictly from the previous day (T-1), ensuring up-to-date coverage for daily exam preparation.
-- **Batch ID System:**
-   - Each extraction run is tagged with a unique batch ID for traceability and repeatability.
-- **Strict Keyword/Topic/Domain Matching:**
-   - Filters news based on RBI exam-relevant keywords, topics, and domains.
-- **EFI Scoring:**
-   - Assigns an Exam-Focused Intelligence (EFI) score to each news item for prioritization.
-- **Excel Output:**
-   - Generates two Excel files: one for accepted news and one for rejected news, with all required metadata.
-- **Summary Report:**
-   - Produces a summary report detailing batch statistics, source coverage, and extraction outcomes.
-- **Robust Error Handling:**
-   - Handles missing data, parsing errors, and network issues gracefully.
-- **Modular & Repeatable:**
-   - Designed for daily, repeatable runs with minimal manual intervention.
+
+* **Curated Source Extraction:**
+
+  * Fetches and processes articles exclusively from a predefined list of verified and trusted sources.
+* **Date-Based Filtering:**
+
+  * Retrieves content strictly from the previous day to maintain freshness and consistency.
+* **Batch Identification:**
+
+  * Every run is tagged with a unique batch ID for tracking and reproducibility.
+* **Keyword/Topic Classification:**
+
+  * Filters ingested content based on a configurable keyword and domain taxonomy.
+* **Relevance Scoring:**
+
+  * Assigns an internal relevance score to each article for prioritization and analytical ranking.
+* **Excel Output Generation:**
+
+  * Produces two structured Excel files: accepted items and filtered-out items, each with detailed metadata.
+* **Summary Reporting:**
+
+  * Generates a summary describing ingestion metrics, source coverage, and processing outcomes.
+* **Error Handling Framework:**
+
+  * Manages parsing failures, malformed pages, and connectivity issues in a controlled manner.
+* **Modular Architecture:**
+
+  * Designed for repeatable, daily operation with minimal manual oversight.
 
 ## How It Was Developed
-1. **Environment Setup:**
-   - Python virtual environment created for isolation.
-   - Dependencies installed: `newspaper3k`, `pandas`, `openpyxl`, `lxml_html_clean`.
-2. **Script Refactoring:**
-   - Removed non-essential features (SMS, Bitly) for compliance and simplicity.
-   - Implemented batch ID, T-1 date logic, and strict source/keyword filtering.
-   - Added EFI scoring and modular output logic.
-3. **GA_ESI_keywords Collection:**
-   - The `GA_ESI_keywords` list was curated by analyzing previous years' RBI Grade B (General) exam papers, official notifications, and authoritative government/financial news sources.
-   - Keywords were selected to cover high-frequency topics, schemes, personalities, indices, government programs, economic terms, and current affairs relevant to General Awareness (GA), Economic & Social Issues (ESI), and Finance.
-   - The list is periodically updated to reflect emerging trends and new topics in the RBI exam ecosystem.
-4. **Output & Reporting:**
-   - Integrated Excel output for accepted/rejected news.
-   - Automated summary report generation for each batch.
-5. **Testing & Debugging:**
-   - Iteratively tested and debugged for missing dependencies, parsing errors, and output compliance.
+
+1. **Environment Configuration:**
+
+   * Implemented an isolated Python environment.
+   * Installed required libraries such as `newspaper3k`, `pandas`, `openpyxl`, and `lxml_html_clean`.
+2. **Codebase Refactoring:**
+
+   * Removed non-core features to streamline the system.
+   * Added date logic, batch identifiers, and controlled source/keyword filters.
+   * Integrated a scoring mechanism and modular output routines.
+3. **Keyword Library Construction:**
+
+   * A structured keyword list was built by analyzing past data patterns and topic categories relevant to the intended use-case.
+   * This taxonomy covers recurring themes, entities, domain-specific terms, and emerging trends.
+   * The list is periodically updated to reflect changes in the information landscape.
+4. **Output & Reporting Layer:**
+
+   * Added automated generation of Excel outputs for accepted and excluded items.
+   * Implemented batch-level summary reporting.
+5. **Testing Cycle:**
+
+   * Conducted iterative testing for dependency issues, parser robustness, and output consistency.
 
 ## Usage Instructions
+
 1. **Install Dependencies:**
-    ```bash
-    pip install newspaper3k pandas openpyxl lxml_html_clean
-    ```
-2. **Run the Script:**
-    ```bash
-    python news_scraper.py
-    ```
 
+   ```bash
+   pip install newspaper3k pandas openpyxl lxml_html_clean
+   ```
+2. **Execute the Script:**
 
+   ```bash
+   python news_scraper.py
+   ```
 
 ## License
+
 See LICENSE file for details.
 
 ## Contact
-For issues or feature requests, please open an issue in this repository.
 
-## Prerequisites
-
-## Step 1
+Submit issues or enhancement requests in the repository.
 
