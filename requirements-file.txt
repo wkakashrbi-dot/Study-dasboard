@@ -18,7 +18,7 @@ lxml
 lxml_html_clean
 newspaper4k
 nltk
-numpy==1.26.4
+numpy==2.0.2
 pandas
 pillow
 python-dateutil
