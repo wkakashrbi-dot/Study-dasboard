@@ -1,0 +1,7 @@
+Batch-ID: 2025-12-12_Report
+Total_Scanned: 25
+Accepted_Count: 0
+Rejected_Count: 55
+Top_EFI_Score: 0
+Highest_EFI_Item: None
+Top_Domains_Represented: []
