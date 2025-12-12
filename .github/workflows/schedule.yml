@@ -2,16 +2,21 @@ name: Nightly Job at 2AM IST
 
 on:
   schedule:
-    - cron: "30 20 * * *"   # Runs every night at 2:00 AM IST
+    - cron: "30 20 * * *"   # 2:00 AM IST (20:30 UTC)
   workflow_dispatch:
 
 jobs:
   run-task:
     runs-on: ubuntu-latest
 
+    env:
+      TIMESTAMP: ${{ github.run_id }}
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # Required so commit back to repo works
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,7 +28,42 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements-file.txt
 
-
-      - name: Execute Script
+      - name: Run News Scraper
         run: |
           python news_scraper.py
+
+      - name: Debug – List generated files
+        run: |
+          echo "Listing files..."
+          ls -lah
+
+      - name: Upload generated Excel/TXT reports (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: GA-Reports-${{ github.run_id }}
+          path: |
+            Accepted_*_Report.xlsx
+            Rejected_*_Report.xlsx
+            Summary_*_Report.txt
+          retention-days: 7
+
+      # -------------------------------------------------------------
+      # OPTIONAL: AUTO-COMMIT REPORTS TO GITHUB REPOSITORY
+      # Enable this only if you want the generated Excel/TXT files 
+      # to permanently appear in the GitHub repo.
+      # -------------------------------------------------------------
+
+      - name: Commit reports to repo
+        if: always()
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+          # Move output files into repo root (if not already)
+          ls -lah
+
+          git add *.xlsx *.txt || echo "No report files to add"
+          
+          git commit -m "Auto-generated reports for run ${{ github.run_id }}" || echo "Nothing to commit"
+          
+          git push || echo "Nothing to push"
