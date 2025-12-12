@@ -47,15 +47,13 @@ batch_id = f"{today.strftime('%Y-%m-%d')}_Report"
 accepted_news = []
 rejected_news = []
 
-# Placeholder for strict output format
-
-# EFI scoring logic
+# --- EFI scoring logic ---
 def compute_efi_score(article):
-    # Simple scoring based on presence of keywords and source type
     relevance = 5 if keyword_match(article.title + " " + article.text) else 0
     data = 5 if any(char.isdigit() for char in article.title + article.text) else 3
     policy = 5 if any(kw in article.title for kw in ["RBI", "SEBI", "Cabinet", "Ministry", "Policy", "Guideline", "Notification", "Circular", "Budget"]) else 3
     recurrence = 5 if keyword_match(article.title + " " + article.text) else 3
+
     efi_score = (relevance + data + policy + recurrence) * 5
     if efi_score >= 80:
         efi_cat = "MUST STUDY"
@@ -67,7 +65,17 @@ def compute_efi_score(article):
         efi_cat = "LOW"
     else:
         efi_cat = "IGNORE"
+
     return relevance, data, policy, recurrence, efi_score, efi_cat
+
+# --- NEW: Extract matching keywords ---
+def extract_matching_keywords(text):
+    text_lower = text.lower()
+    matched = []
+    for kw in GA_ESI_keywords:
+        if kw.lower() in text_lower:
+            matched.append(kw)
+    return matched
 
 def format_news_item(headline, source, date, category, keywords, url, article=None):
     relevance, data, policy, recurrence, efi_score, efi_cat = compute_efi_score(article) if article else ("", "", "", "", "", "")
@@ -89,14 +97,12 @@ def format_news_item(headline, source, date, category, keywords, url, article=No
         "EFI_Summary": f"EFI Summary → {efi_score}/100: {efi_cat}"
     }
 
-# Placeholder for Excel writing
 def write_excel(filename, data, columns):
     df = pd.DataFrame(data, columns=columns)
     df.to_excel(filename, index=False)
 
 
-
-# --- Extraction logic: T-1 date filter + keyword/topic/domain matching ---
+# --- Keywords list ---
 GA_ESI_keywords = [
     "Girnar Ropeway", "BRICS", "Budget", "PMEGP", 
     "Padma Vibhushan", "Electoral Bond", "Census", 
@@ -293,14 +299,16 @@ def extract_news_from_url(url, priority_label):
                                 pub_date = None
                 # Accept only if date matches T-1 and matches keywords
                 if pub_date and pub_date.date() == t1_date.date():
-                    if keyword_match(article.title + " " + article.text):
+                    text = (article.title or "") + " " + (article.text or "")
+                    matched_keywords = extract_matching_keywords(text)
+                    if matched_keywords:
                         found_t1 = True
                         accepted_news.append(format_news_item(
                             headline=article.title,
                             source=priority_label,
                             date=pub_date.strftime('%Y-%m-%d'),
                             category="",
-                            keywords=[],
+                            keywords=matched_keywords,
                             url=article.url,
                             article=article
                         ))
